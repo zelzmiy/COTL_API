@@ -30,6 +30,8 @@ public class Plugin : BaseUnityPlugin
 {
     internal static Dropdown? LambFleeceSkinSettings;
     internal static Dropdown? GoatFleeceSkinSettings;
+    internal static Dropdown? LambFleeceBleatSettings;
+    internal static Dropdown? GoatFleeceBleatSettings;
 
     private readonly Harmony _harmony = new(MyPluginInfo.PLUGIN_GUID);
 
@@ -142,6 +144,23 @@ public class Plugin : BaseUnityPlugin
                         CustomSkinManager.CustomPlayerSkins.Values.ElementAt(i));
             });
 
+        LambFleeceBleatSettings = CustomSettingsManager.AddSavedDropdown("API", MyPluginInfo.PLUGIN_GUID,
+            "Lamb Fleece Bleat",
+            "Lamb",
+            Enum.GetNames(typeof(PlayerBleat)), i =>
+            {
+                CustomSkinManager.SetPlayerBleatOverride(PlayerType.LAMB, (PlayerBleat) i);
+            }); 
+        
+        GoatFleeceBleatSettings = CustomSettingsManager.AddSavedDropdown("API", MyPluginInfo.PLUGIN_GUID,
+            "Goat Fleece Bleat",
+            "Goat",
+            Enum.GetNames(typeof(PlayerBleat)), i =>
+            {
+                CustomSkinManager.SetPlayerBleatOverride(PlayerType.GOAT, (PlayerBleat) i);
+            });
+            
+
         CustomSettingsManager.AddBepInExConfig("API", "Skip Splash Screen", _skipSplashScreen);
         CustomSettingsManager.AddBepInExConfig("API", "Disable Achievement", _disableAchievement,
             delegate(bool isActivated)
@@ -207,9 +226,12 @@ public class Plugin : BaseUnityPlugin
         }
 
         // ReSharper disable once InvertIf
-        if (Input.GetKeyDown(KeyCode.F2))
-            foreach (var x in PlayerFarming.Instance.Spine.Skeleton.Skin.Attachments)
-                LogDebug($"{{ \"{x.Name}\", Tuple.Create({x.SlotIndex}, \"{x.Name}\") }}");
+        if (Input.GetKeyDown(KeyCode.F2)) {
+            var slots = PlayerFarming.Instance.Spine.Skeleton.Skin.Attachments;
+            var sortedSlots = slots.OrderBy(x => x.SlotIndex).ToList();
+            var jsonOutput = sortedSlots.Select(x => $"{{ \"{x.Name}\", Tuple.Create({x.SlotIndex}, \"{x.Name}\") }}");
+            LogDebug(string.Join(",\n", jsonOutput));
+        }
 
         // ReSharper disable once InvertIf
         if (Input.GetKeyDown(KeyCode.F3))
@@ -229,7 +251,10 @@ public class Plugin : BaseUnityPlugin
         LogInfo($"{MyPluginInfo.PLUGIN_NAME} unloaded!");
     }
 
-    internal static event Action OnStart = delegate { };
+    internal static event Action OnStart = delegate
+    {
+        CustomItemManager.InitiateCustomCrops();
+    };
 
     private void RunSavePatch()
     {
@@ -298,7 +323,7 @@ public class Plugin : BaseUnityPlugin
         CustomLocalizationManager.LoadLocalization("English",
             Path.Combine(PluginPath, "Assets", "English-Debug.language"));
 
-        CustomSkinManager.AddFollowerSkin(new DebugFollowerSkin());
+        CustomSkinManager.AddFollowerSkin([new DebugFollowerSkin(), new DebugFollowerSkin2()]);
         CustomSkinManager.AddPlayerSkin(new DebugPlayerSkin());
 
         CustomFollowerCommandManager.Add(new DebugFollowerCommand());

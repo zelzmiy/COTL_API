@@ -12,6 +12,14 @@ public enum PlayerType
     GOAT
 }
 
+public enum PlayerBleat
+{
+    DEFAULT,
+    LAMB,
+    GOAT,
+    COWBOY
+}
+
 [HarmonyPatch]
 public static partial class CustomSkinManager
 {
@@ -242,7 +250,10 @@ public static partial class CustomSkinManager
         { "Weapons/Hammer", Tuple.Create(22, "Weapons/Hammer") },
         { "Weapons/Sword", Tuple.Create(22, "Weapons/Sword") },
         { "DaggerFlipped", Tuple.Create(22, "DaggerFlipped") },
+        { "Shield", Tuple.Create(22, "Shield") },
+        { "Blunderbuss/Flipped", Tuple.Create(22, "Blunderbuss/Flipped") },
         { "ARM_RIGHT", Tuple.Create(23, "ARM_RIGHT") },
+        { "PonchoShoulder_Right", Tuple.Create(24, "PonchoShoulder_Right") },
         { "ArmSpikes", Tuple.Create(25, "ArmSpikes") },
         { "PonchoRight", Tuple.Create(26, "PonchoRight") },
         { "PonchoRight2", Tuple.Create(26, "PonchoRight2") },
@@ -269,13 +280,24 @@ public static partial class CustomSkinManager
         { "CROWN_SERMON", Tuple.Create(37, "CROWN_SERMON") },
         { "BigCrown", Tuple.Create(37, "BigCrown") },
         { "CROWN_WHITE", Tuple.Create(37, "CROWN_WHITE") },
-        { "images/CrownEyeShut3", Tuple.Create(39, "images/CrownEyeShut3") },
-        { "images/CrownEyeShut2", Tuple.Create(39, "images/CrownEyeShut2") },
-        { "images/CrownEyeShut", Tuple.Create(39, "images/CrownEyeShut") },
-        { "CROWN_EYE", Tuple.Create(39, "CROWN_EYE") },
-        { "images/CrownEye_RITUAL", Tuple.Create(39, "images/CrownEye_RITUAL") },
-        { "images/CrownEye_SERMON", Tuple.Create(39, "images/CrownEye_SERMON") },
-        { "images/CrownEyeBig", Tuple.Create(39, "images/CrownEyeBig") },
+        { "images/CrownEyeShut3a", Tuple.Create(39, "images/CrownEyeShut3") },
+        { "images/CrownEyeShut2a", Tuple.Create(39, "images/CrownEyeShut2") },
+        { "images/CrownEyeShuta", Tuple.Create(39, "images/CrownEyeShut") },
+        { "CROWN_EYEa", Tuple.Create(39, "CROWN_EYE") },
+        { "images/CrownEye_RITUALa", Tuple.Create(39, "images/CrownEye_RITUAL") },
+        { "images/CrownEye_SERMONa", Tuple.Create(39, "images/CrownEye_SERMON") },
+        { "images/CrownEyeBiga", Tuple.Create(39, "images/CrownEyeBig") },
+        { "images/CrownEyeBig2a", Tuple.Create(39, "images/CrownEyeBig2") },
+        { "CrownEyeSina", Tuple.Create(39, "CrownEyeSin") },
+        { "CROWN_EYEb", Tuple.Create(40, "CROWN_EYE") },
+        { "images/CrownEyeBigb", Tuple.Create(40, "images/CrownEyeBig") },
+        { "images/CrownEyeBig2b", Tuple.Create(40, "images/CrownEyeBig2") },
+        { "images/CrownEyeShutb", Tuple.Create(40, "images/CrownEyeShut") },
+        { "images/CrownEyeShut2b", Tuple.Create(40, "images/CrownEyeShut2") },
+        { "images/CrownEyeShut3b", Tuple.Create(40, "images/CrownEyeShut3") },
+        { "images/CrownEye_RITUALb", Tuple.Create(40, "images/CrownEye_RITUAL") },
+        { "images/CrownEye_SERMONb", Tuple.Create(40, "images/CrownEye_SERMON") },
+        { "CrownEyeSinb", Tuple.Create(40, "CrownEyeSin") },
         { "HeadBack", Tuple.Create(43, "HeadBack") },
         { "HeadBackDown", Tuple.Create(43, "HeadBackDown") },
         { "HeadBackDown_RITUAL", Tuple.Create(43, "HeadBackDown_RITUAL") },
@@ -315,6 +337,8 @@ public static partial class CustomSkinManager
         { "MOUTH_TALK3", Tuple.Create(49, "MOUTH_TALK3") },
         { "MOUTH_TALK4", Tuple.Create(49, "MOUTH_TALK4") },
         { "MOUTH_TALK5", Tuple.Create(49, "MOUTH_TALK5") },
+        { "Face/MOUTH_HUNGRY1", Tuple.Create(49, "Face/MOUTH_HUNGRY1") },
+        { "Face/MOUTH_HUNGRY2", Tuple.Create(49, "Face/MOUTH_HUNGRY2") },
         { "EYE_LEFT", Tuple.Create(50, "EYE") },
         { "EYE_ANGRY_LEFT", Tuple.Create(50, "EYE_ANGRY_LEFT") },
         { "EYE_BACK_LEFT", Tuple.Create(50, "EYE_BACK") },
@@ -325,7 +349,7 @@ public static partial class CustomSkinManager
         { "EYE_HAPPY_LEFT", Tuple.Create(50, "EYE_HAPPY") },
         { "EYE_UP_LEFT", Tuple.Create(50, "EYE_UP") },
         { "EYE_WORRIED_LEFT", Tuple.Create(50, "EYE_WORRIED_LEFT") },
-        { "Face/EYE_CLOSED_LEFT_LEFT", Tuple.Create(50, "Face/EYE_CLOSED") },
+        { "Face/EYE_CLOSED_LEFT", Tuple.Create(50, "Face/EYE_CLOSED") },
         { "Face/EYE_DEAD_LEFT", Tuple.Create(50, "Face/EYE_DEAD") },
         { "Face/EYE_RED_LEFT", Tuple.Create(50, "Face/EYE_RED") },
         { "Face/EYE_SHOCKED_LEFT", Tuple.Create(50, "Face/EYE_SHOCKED") },
@@ -341,6 +365,7 @@ public static partial class CustomSkinManager
         { "EYE_HAPPY2_LEFT", Tuple.Create(50, "EYE_HAPPY2") },
         { "Face/EYE_RED_ANGRY_LEFT", Tuple.Create(50, "Face/EYE_RED_ANGRY") },
         { "EYE_WHITE_ANGRY_LEFT", Tuple.Create(50, "EYE_WHITE_ANGRY") },
+        { "Face/EYE_HAPPY_UP_LEFT", Tuple.Create(50, "Face/EYE_HAPPY_UP") },
         { "EYE_RIGHT", Tuple.Create(51, "EYE") },
         { "EYE_ANGRY_RIGHT", Tuple.Create(51, "EYE_ANGRY_RIGHT") },
         { "EYE_BACK_RIGHT", Tuple.Create(51, "EYE_BACK") },
@@ -367,6 +392,7 @@ public static partial class CustomSkinManager
         { "EYE_HAPPY2_RIGHT", Tuple.Create(51, "EYE_HAPPY2") },
         { "Face/EYE_RED_ANGRY_RIGHT", Tuple.Create(51, "Face/EYE_RED_ANGRY") },
         { "EYE_WHITE_ANGRY_RIGHT", Tuple.Create(51, "EYE_WHITE_ANGRY") },
+        { "Face/EYE_HAPPY_UP_RIGHT", Tuple.Create(51, "Face/EYE_HAPPY_UP") },
         { "HairTuft", Tuple.Create(52, "HairTuft") },
         { "Tools/Book_open", Tuple.Create(53, "Tools/Book_open") },
         { "Tools/Book_closed", Tuple.Create(53, "Tools/Book_closed") },
@@ -378,6 +404,7 @@ public static partial class CustomSkinManager
         { "PonchoRightCorner2", Tuple.Create(56, "PonchoRightCorner") },
         { "images/CrownMouth", Tuple.Create(57, "images/CrownMouth") },
         { "images/CrownMouthOpen", Tuple.Create(57, "images/CrownMouthOpen") },
+        { "DRINK", Tuple.Create(58, "DRINK") },
         { "Tools/Chalice", Tuple.Create(59, "Tools/Chalice") },
         { "Tools/Chalice_Skull", Tuple.Create(59, "Tools/Chalice_Skull") },
         { "Tools/Chalice_Skull_Drink", Tuple.Create(59, "Tools/Chalice_Skull_Drink") },
@@ -396,9 +423,11 @@ public static partial class CustomSkinManager
         { "GauntletHeavyb", Tuple.Create(66, "GauntletHeavy") },
         { "GauntletHeavy2b", Tuple.Create(66, "GauntletHeavy2") },
         { "Weapons/Sling", Tuple.Create(67, "Weapons/Sling") },
-        { "Weapons/SlingRope", Tuple.Create(67, "Weapons/SlingRope") },
-        { "SlingHand", Tuple.Create(69, "SlingHand") },
+        { "Weapons/SlingRope", Tuple.Create(68, "Weapons/SlingRope") },
+        { "GunHand", Tuple.Create(69, "GunHand") },
+        { "SlingHand", Tuple.Create(70, "SlingHand") },
         { "Arm_frontbit", Tuple.Create(71, "Arm_frontbit") },
+        { "Arm_frontbit2", Tuple.Create(72, "Arm_frontbit") },
         { "whiteball", Tuple.Create(73, "whiteball") },
         { "effects/whiteball", Tuple.Create(74, "effects/whiteball") },
         { "Weapons/SlingHand", Tuple.Create(75, "Weapons/SlingHand") },
@@ -436,6 +465,7 @@ public static partial class CustomSkinManager
         { "MonsterHeart_glow2", Tuple.Create(94, "MonsterHeart_glow") },
         { "GiftSmall", Tuple.Create(94, "GiftSmall") },
         { "GiftMedium", Tuple.Create(94, "GiftMedium") },
+        { "RedHeartPickUp", Tuple.Create(94, "Red Heart Pick Up") },
         { "effects/MonsterBlood1a", Tuple.Create(95, "effects/MonsterBlood1") },
         { "effects/MonsterBlood1b", Tuple.Create(96, "effects/MonsterBlood1") },
         { "MonsterBlood2", Tuple.Create(97, "MonsterBlood2") },
@@ -472,6 +502,7 @@ public static partial class CustomSkinManager
         { "Weapons/SwordHeavy_Charm", Tuple.Create(116, "Weapons/SwordHeavy_Charm") },
         { "AxeHeavy", Tuple.Create(116, "AxeHeavy") },
         { "HammerHeavy", Tuple.Create(116, "HammerHeavy") },
+        { "Blunderbuss_Heavy", Tuple.Create(116, "Blunderbuss_Heavy") },
         { "effects/SpawnHeavy_1", Tuple.Create(117, "effects/SpawnHeavy_1") },
         { "effects/SpawnHeavy_2", Tuple.Create(117, "effects/SpawnHeavy_2") },
         { "effects/SpawnHeavy_3", Tuple.Create(117, "effects/SpawnHeavy_3") },
@@ -504,28 +535,44 @@ public static partial class CustomSkinManager
     };
 
     internal static Dictionary<PlayerType, List<Skin?>?> PlayerSkinOverride { get; set; } = [];
+    internal static Dictionary<PlayerType, PlayerBleat?> PlayerBleatOverride { get; set; } = [];
 
-    public static void AddFollowerSkin(CustomFollowerSkin followerSkin)
-    {
-        var atlasText = followerSkin.GenerateAtlasText();
-        AddFollowerSkin(followerSkin.Name, followerSkin.Texture, atlasText, followerSkin.Colors, followerSkin.Hidden,
-            followerSkin.Unlocked, followerSkin.TwitchPremium,
-            followerSkin.Invariant);
+    public static void AddFollowerSkin(CustomFollowerSkin followerSkin) {
+        AddFollowerSkin([followerSkin]);
     }
 
-    public static void AddFollowerSkin(string name, Texture2D sheet, string atlasText,
+    public static void AddFollowerSkin(List<CustomFollowerSkin> followerVariants)
+    {
+        var variantAtlasTexts = followerVariants.Select(f => f.GenerateAtlasText()).ToList();
+        var followerForm = followerVariants[0];
+        
+        AddFollowerSkin(followerForm.Name, followerForm.Texture, variantAtlasTexts, followerForm.Colors, followerForm.Hidden,
+                followerForm.Unlocked, followerForm.TwitchPremium,
+                followerForm.Invariant);
+    }
+
+    public static void AddFollowerSkin(string name, Texture2D sheet, List<string> variants,
         List<WorshipperData.SlotsAndColours> colors, bool hidden = false, bool unlocked = true,
         bool twitchPremium = false, bool invariant = false)
     {
-        var overrides =
-            SkinUtils.CreateSkinAtlas(name, sheet, atlasText, RegionOverrideFunction, out var mat, out var atlas);
+        List<string> variantNames = [];
 
-        SkinTextures.Add(name, sheet);
-        SkinMaterials.Add(name, mat);
-        CustomAtlases.Add(name, atlas);
+        for (var i = 0; i < variants.Count; i++)
+        {
+            var variantName = i == 0 ? name : name + "_" + i;
+            variantNames.Add(variantName);
+            var variantOverrides =
+                SkinUtils.CreateSkinAtlas(variantName, sheet, variants[i], RegionOverrideFunction, out var variantMat,
+                    out var variantAtlas);
 
-        CreateNewFollowerType(name, colors, hidden, twitchPremium, invariant);
-        CreateFollowerSkin(name, overrides, unlocked);
+            SkinTextures.Add(variantName, sheet);
+            SkinMaterials.Add(variantName, variantMat);
+            CustomAtlases.Add(variantName, variantAtlas);
+
+            CreateFollowerSkin(variantName, variantOverrides, unlocked);
+        }
+
+        CreateNewFollowerType(name, variantNames, colors, hidden, twitchPremium, invariant);
     }
 
     public static void AddPlayerSkin(CustomPlayerSkin playerSkin)
@@ -575,19 +622,19 @@ public static partial class CustomSkinManager
         return [];
     }
 
-    internal static void CreateNewFollowerType(string name, List<WorshipperData.SlotsAndColours> colors,
+    internal static void CreateNewFollowerType(string name, List<string> variantNames, List<WorshipperData.SlotsAndColours> colors,
         bool hidden = false, bool twitchPremium = false, bool invariant = false)
     {
+        var skins = variantNames.Select(v => new WorshipperData.CharacterSkin
+            {
+                Skin = v
+            }).ToList();
+
+
         WorshipperData.Instance.Characters.Add(new WorshipperData.SkinAndData
         {
             Title = name,
-            Skin =
-            [
-                new WorshipperData.CharacterSkin
-                {
-                    Skin = name
-                }
-            ],
+            Skin = skins,
             SlotAndColours = colors,
             TwitchPremium = twitchPremium,
             _hidden = hidden,
@@ -779,6 +826,12 @@ public static partial class CustomSkinManager
     public static void SetPlayerSkinOverride(PlayerType who, CustomPlayerSkin skin)
     {
         skin.Apply(who);
+    }
+
+    public static void SetPlayerBleatOverride(PlayerType who, PlayerBleat? bleat)
+    {
+        if (bleat == PlayerBleat.DEFAULT) PlayerBleatOverride[who] = null;
+        else PlayerBleatOverride[who] = bleat;
     }
 
     public static void ResetPlayerSkin()

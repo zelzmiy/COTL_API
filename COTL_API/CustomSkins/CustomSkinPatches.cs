@@ -1,7 +1,9 @@
+using System.Collections;
 using HarmonyLib;
 using Lamb.UI;
 using LeTai.Asset.TranslucentImage;
 using Spine;
+using src.Alerts;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using Object = UnityEngine.Object;
@@ -29,6 +31,14 @@ public partial class CustomSkinManager
         if (AlwaysUnlockedSkins.TryGetValue(skinName, out var alwaysUnlocked) && alwaysUnlocked)
             DataManager.SetFollowerSkinUnlocked(skinName);
     }
+
+    [HarmonyPatch(typeof(CharacterSkinAlerts), nameof(CharacterSkinAlerts.OnSkinUnlocked), typeof(string))]
+    [HarmonyPrefix]
+    private static bool CharacterSkinAlerts_OnSkinUnlocked(string skinName)
+    {
+        return false;
+    }
+
 
     [HarmonyPatch(typeof(Graphics), nameof(Graphics.CopyTexture), typeof(Texture), typeof(int), typeof(int),
         typeof(int), typeof(int), typeof(int), typeof(int), typeof(Texture), typeof(int), typeof(int), typeof(int),
@@ -175,4 +185,62 @@ public partial class CustomSkinManager
         __result = __instance.PlayerSkin;
         return false;
     }
+
+    [HarmonyPatch(typeof(PlayerFarming), nameof(PlayerFarming.BleatRoutine), MethodType.Enumerator)]
+    [HarmonyPrefix]
+    private static bool PlayerFarming_BleatRoutine(PlayerFarming __instance)
+    {
+        var playerType = PlayerType.LAMB;
+
+        //TODO: TEMPFIX. find out what happened in the update, why is both isLamb and isGoat returning false?
+        LogInfo("IsLamb" +  __instance.isLamb);
+        LogInfo("IsGoat" + __instance.IsGoat);
+
+        var playerInstance = PlayerFarming.players[0];
+
+        if (CoopManager.CoopActive)
+        {
+            playerType = !__instance.isLamb || __instance.IsGoat ? PlayerType.GOAT : PlayerType.LAMB;
+            playerInstance = !__instance.isLamb || __instance.IsGoat ? PlayerFarming.players[1] : PlayerFarming.players[0];
+        }
+
+        if (!PlayerBleatOverride.ContainsKey(playerType)) return true;
+
+        var bleatOverride = PlayerBleatOverride[playerType];
+        if (bleatOverride == null) return true;
+
+        PlayerFarming.Instance.StartCoroutine(BleatOverrideRoutine(playerInstance, bleatOverride));
+        return false;
+        
+    }
+
+    private static IEnumerator BleatOverrideRoutine(PlayerFarming instance, PlayerBleat? bleatOverride) {
+        instance.state.CURRENT_STATE = StateMachine.State.CustomAnimation;
+        
+        var anim = bleatOverride switch
+        {
+            PlayerBleat.LAMB => "bleat",
+            PlayerBleat.GOAT => "bleat-goat3",
+            PlayerBleat.COWBOY => "Cowboy/yeehaw-bleat",
+            _ => "bleat"
+        };
+
+        var audio = bleatOverride switch
+        {
+            PlayerBleat.LAMB => "event:/player/speak_to_follower_noBookPage",
+            PlayerBleat.GOAT => "event:/player/goat_player/goat_bleat",
+            PlayerBleat.COWBOY => "event:/player/yeehaa",
+            _ => "event:/player/speak_to_follower_noBookPage"
+        };
+
+        instance.simpleSpineAnimator.Animate(anim, 0, false);
+        AudioManager.Instance.PlayOneShot(audio, instance.gameObject);
+        yield return new WaitForSeconds(bleatOverride == PlayerBleat.LAMB ? 0.4f : 1.25f);
+
+        if (instance.state.CURRENT_STATE == StateMachine.State.CustomAnimation)
+            instance.state.CURRENT_STATE = StateMachine.State.Idle;
+        yield return null;
+
+    }
+
 }

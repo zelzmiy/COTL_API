@@ -1,7 +1,8 @@
+using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
 using src.UI.InfoCards;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace COTL_API.CustomInventory;
 
@@ -166,4 +167,70 @@ public static partial class CustomItemManager
             localPosition = transform.localPosition;
         }
     }
+
+    [HarmonyPatch(typeof(CookingData), nameof(CookingData.GetRecipeSimplified))]
+    [HarmonyPrefix]
+    private static bool CookingData_GetRecipeSimplified(InventoryItem.ITEM_TYPE meal, ref List<InventoryItem> __result)
+    {
+        var recipes = CookingData.GetRecipe(meal);
+        List<InventoryItem> list = [];
+        recipes.Where(CookingData.CanMakeMealUsingRecipe).First().Do(item =>
+        {
+            var flag = false;
+            foreach (var item2 in list.Where(item2 => item2.type == item.type))
+            {
+                item2.quantity++;
+                flag = true;
+                break;
+            }
+
+            if (!flag)
+            {
+                list.Add(new InventoryItem((InventoryItem.ITEM_TYPE)item.type, item.quantity));
+            }
+        });
+
+        __result = list;
+        return false;
+    }
+
+    #region transgenderpilors
+
+    private static readonly MethodInfo s_deductFoodCostInfo = SymbolExtensions.GetMethodInfo(() => DeductFoodCost);
+
+    [HarmonyPatch(typeof(UIPubMenuController), nameof(UIPubMenuController.AddToQueue))]
+    [HarmonyTranspiler]
+    private static IEnumerable<CodeInstruction> UIPubMenuController_AddToQueue(
+        IEnumerable<CodeInstruction> instructions)
+    {
+        var instructionList = instructions.ToList();
+        for (var i = 0; i < instructionList.Count; i++)
+        {
+            var instruction = instructionList[i];
+            if (instruction.opcode != OpCodes.Stloc_1) continue;
+
+            while (instructionList[i].opcode != OpCodes.Leave_S)
+            {
+                i++;
+                instructionList[i].opcode = OpCodes.Nop;
+            }
+
+            instructionList.Insert(i, new CodeInstruction(OpCodes.Ldarg_0)); // InventoryItem.ITEM_TYPE meal
+            instructionList.Insert(++i, new CodeInstruction(OpCodes.Call, s_deductFoodCostInfo));
+
+            break;
+        }
+
+        return instructionList.AsEnumerable();
+    }
+
+    private static void DeductFoodCost(InventoryItem.ITEM_TYPE meal)
+    {
+        CookingData.GetRecipe(meal).Where(CookingData.CanMakeMealUsingRecipe).First().Do(item =>
+        {
+            Inventory.ChangeItemQuantity(item.type, -item.quantity);
+        });
+    }
+
+    #endregion
 }
